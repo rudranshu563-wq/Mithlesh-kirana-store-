@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mithlesh Kirana Store</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,sans-serif;
+  background:#f4f6f5;
+  color:#222;
+}
+
+header{
+  background:#198754;
+  color:white;
+  text-align:center;
+  padding:22px 15px;
+}
+
+header h1{
+  font-size:27px;
+  margin-bottom:6px;
+}
+
+header p{
+  font-size:14px;
+}
+
+.search{
+  background:white;
+  padding:15px;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.search input{
+  width:100%;
+  padding:13px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  font-size:16px;
+}
+
+.categories{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:12px;
+  background:white;
+}
+
+.categories button{
+  width:auto;
+  white-space:nowrap;
+  padding:9px 15px;
+  background:#e8f5ee;
+  color:#198754;
+}
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+  padding:15px;
+}
+
+.product{
+  background:white;
+  border-radius:14px;
+  padding:12px;
+  box-shadow:0 2px 8px #ddd;
+}
+
+.product .emoji{
+  font-size:42px;
+  text-align:center;
+  padding:10px;
+}
+
+.product h3{
+  font-size:16px;
+  margin:6px 0;
+}
+
+.product .price{
+  color:#198754;
+  font-size:18px;
+  font-weight:bold;
+  margin:8px 0;
+}
+
+.add{
+  background:#198754;
+  color:white;
+  border:none;
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  font-size:15px;
+}
+
+.cart,
+.order,
+.shop-info{
+  background:white;
+  margin:15px;
+  padding:17px;
+  border-radius:14px;
+  box-shadow:0 2px 7px #ddd;
+}
+
+.cart h2,
+.order h2,
+.shop-info h2{
+  margin-bottom:12px;
+}
+
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid #eee;
+}
+
+.qty button{
+  width:30px;
+  height:30px;
+  border:none;
+  border-radius:5px;
+  background:#198754;
+  color:white;
+}
+
+.total{
+  font-size:20px;
+  font-weight:bold;
+  margin-top:15px;
+}
+
+.order input,
+.order textarea{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  border:1px solid #ddd;
+  border-radius:8px;
+  font-size:15px;
+}
+
+.whatsapp{
+  background:#25D366;
+  color:white;
+  border:none;
+  width:100%;
+  padding:14px;
+  border-radius:9px;
+  font-size:17px;
+  font-weight:bold;
+  margin-top:8px;
+}
+
+.map{
+  display:block;
+  text-align:center;
+  text-decoration:none;
+  background:#0d6efd;
+  color:white;
+  padding:12px;
+  border-radius:8px;
+  margin-top:12px;
+}
+
+footer{
+  background:#222;
+  color:white;
+  text-align:center;
+  padding:18px;
+  margin-top:20px;
+}
+
+@media(min-width:700px){
+  .products{
+    grid-template-columns:repeat(4,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🛒 Mithlesh Kirana Store</h1>
+  <p>आपका अपना भरोसेमंद किराना स्टोर</p>
+</header>
+
+<div class="search">
+  <input
+    id="search"
+    type="text"
+    placeholder="🔎 सामान खोजें..."
+    onkeyup="searchProducts()">
+</div>
+
+<div class="categories">
+  <button onclick="filterProducts('all')">सभी</button>
+  <button onclick="filterProducts('grocery')">किराना</button>
+  <button onclick="filterProducts('dal')">दाल</button>
+  <button onclick="filterProducts('oil')">तेल</button>
+  <button onclick="filterProducts('snacks')">बिस्किट</button>
+</div>
+
+<div class="products" id="products">
+
+  <div class="product" data-category="grocery">
+    <div class="emoji">🌾</div>
+    <h3>आटा 5kg</h3>
+    <div class="price">₹250</div>
+    <button class="add" onclick="addToCart('आटा 5kg',250)">
+      Add to Cart
+    </button>
+  </div>
+
+  <div class="product" data-category="grocery">
+    <div class="emoji">🍚</div>
+    <h3>चावल 5kg</h3>
+    <div class="price">₹300</div>
+    <button class="add" onclick="addToCart('चावल 5kg',300)">
+      Add to Cart
+    </button>
+  </div>
+
+  <div class="product" data-category="dal">
+    <div class="emoji">🥣</div>
+    <h3>अरहर दाल 1kg</h3>
+    <div class="price">₹140</div>
+    <button class="add" onclick="addToCart('अरहर दाल 1kg',140)">
+      Add to Cart
+    </button>
+  </div>
+
+  <div class="product" data-category="dal">
+    <div class="emoji">🫘</div>
+    <h3>मसूर दाल 1kg</h3>
+    <div class="price">₹110</div>
+    <button class="add" onclick="addToCart('मसूर दाल 1kg',110)">
+      Add to Cart
+    </button>
+  </div>
+
+  <div class="product" data-category="oil">
+    <div class="emoji">🫗</div>
+    <h3>Refined Oil 1L</h3>
+    <div class="price">₹130</div>
+    <button class="add" onclick="addToCart('Refined Oil 1L',130)">
+      Add to Cart
+    </button>
+  </div>
+
+  <div class="product" data-category="grocery">
+    <div class="emoji">🍬</div>
+    <h3>चीनी 1kg</h3>
+    <div class="price">₹50</div>
+    <button class="add" onclick="addToCart('चीनी 1kg',50)">
+      Add to Cart
+    </button>
+  </div>
+
+  <div class="product" data-category="grocery">
+    <div class="emoji">🧂</div>
+    <h3>नमक 1kg</h3>
+    <div class="price">₹25</div>
+    <button class="add" onclick="addToCart('नमक 1kg',25)">
+      Add to Cart
+    </button>
+  </div>
+
+  <div class="product" data-category="snacks">
+    <div class="emoji">🍪</div>
+    <h3>बिस्किट</h3>
+    <div class="price">₹10</div>
+    <button class="add" onclick="addToCart('बिस्किट',10)">
+      Add to Cart
+    </button>
+  </div>
+
+</div>
+
+<div class="cart">
+
+  <h2>🛒 आपका Cart</h2>
+
+  <div id="cartItems">
+    Cart खाली है
+  </div>
+
+  <div class="total">
+    Total: ₹<span id="total">0</span>
+  </div>
+
+</div>
+
+<div class="order">
+
+  <h2>📦 Order करें</h2>
+
+  <input id="name" type="text" placeholder="आपका नाम">
+
+  <input id="phone" type="tel" placeholder="Mobile Number">
+
+  <textarea
+    id="address"
+    rows="3"
+    placeholder="Delivery Address"></textarea>
+
+  <button class="whatsapp" onclick="placeOrder()">
+    📲 WhatsApp पर Order करें
+  </button>
+
+</div>
+
+<div class="shop-info">
+
+  <h2>🏪 हमारी दुकान</h2>
+
+  <p>
+    <b>Mithlesh Kirana Store</b>
+  </p>
+
+  <p>
+    📍 Udwapur, Rampurwa, Bahraich, Uttar Pradesh
+  </p>
+
+  <a
+    class="map"
+    href="https://www.google.com/maps/search/?api=1&query=Mithlesh+Kirana+Store+Udwapur+Rampurwa+Bahraich"
+    target="_blank">
+    📍 Google Maps पर देखें
+  </a>
+
+</div>
+
+<footer>
+  © 2026 Mithlesh Kirana Store
+</footer>
+
+
+<script>
+
+let cart = [];
+
+function addToCart(name, price){
+
+  let existing = cart.find(item => item.name === name);
+
+  if(existing){
+    existing.qty++;
+  }else{
+    cart.push({
+      name:name,
+      price:price,
+      qty:1
+    });
+  }
+
+  showCart();
+}
+
+
+function increase(index){
+
+  cart[index].qty++;
+
+  showCart();
+}
+
+
+function decrease(index){
+
+  cart[index].qty--;
+
+  if(cart[index].qty <= 0){
+    cart.splice(index,1);
+  }
+
+  showCart();
+}
+
+
+function showCart(){
+
+  let box = document.getElementById("cartItems");
+
+  if(cart.length === 0){
+
+    box.innerHTML = "Cart खाली है";
+
+    document.getElementById("total").innerText = "0";
+
+    return;
+  }
+
+  box.innerHTML = "";
+
+  let total = 0;
+
+  cart.forEach((item,index)=>{
+
+    let itemTotal = item.price * item.qty;
+
+    total += itemTotal;
+
+    box.innerHTML += `
+      <div class="cart-item">
+
+        <div>
+          <b>${item.name}</b><br>
+          ₹${item.price} × ${item.qty}
+        </div>
+
+        <div class="qty">
+
+          <button onclick="decrease(${index})">−</button>
+
+          <span style="padding:8px">
+            ${item.qty}
+          </span>
+
+          <button onclick="increase(${index})">+</button>
+
+        </div>
+
+      </div>
+    `;
+
+  });
+
+  document.getElementById("total").innerText = total;
+}
+
+
+function searchProducts(){
+
+  let search =
+    document.getElementById("search")
+    .value
+    .toLowerCase();
+
+  let products =
+    document.querySelectorAll(".product");
+
+  products.forEach(product=>{
+
+    let name =
+      product.innerText.toLowerCase();
+
+    product.style.display =
+      name.includes(search)
+      ? "block"
+      : "none";
+
+  });
+}
+
+
+function filterProducts(category){
+
+  let products =
+    document.querySelectorAll(".product");
+
+  products.forEach(product=>{
+
+    if(category === "all" ||
+       product.dataset.category === category){
+
+      product.style.display = "block";
+
+    }else{
+
+      product.style.display = "none";
+
+    }
+
+  });
+
+}
+
+
+function placeOrder(){
+
+  if(cart.length === 0){
+
+    alert("पहले Cart में सामान जोड़ें!");
+
+    return;
+  }
+
+  let name =
+    document.getElementById("name").value.trim();
+
+  let phone =
+    document.getElementById("phone").value.trim();
+
+  let address =
+    document.getElementById("address").value.trim();
+
+  if(name === "" || phone === "" || address === ""){
+
+    alert("कृपया नाम, मोबाइल और address भरें!");
+
+    return;
+  }
+
+  let total = 0;
+
+  let message =
+    "🛒 *Mithlesh Kirana Store - New Order*%0A%0A";
+
+  message +=
+    "👤 नाम: " + name + "%0A";
+
+  message +=
+    "📱 Mobile: " + phone + "%0A";
+
+  message +=
+    "📍 Address: " + address + "%0A%0A";
+
+  message +=
+    "🛍️ *सामान:*%0A";
+
+  cart.forEach((item,index)=>{
+
+    let itemTotal =
+      item.price * item.qty;
+
+    total += itemTotal;
+
+    message +=
+      (index+1) + ". " +
+      item.name +
+      " × " +
+      item.qty +
+      " = ₹" +
+      itemTotal +
+      "%0A";
+
+  });
+
+  message +=
+    "%0A💰 *Total: ₹" +
+    total +
+    "*";
+
+  let whatsappNumber =
+    "917317726392";
+
+  let url =
+    "https://wa.me/" +
+    whatsappNumber +
+    "?text=" +
+    message;
+
+  window.open(url,"_blank");
+
+}
+
+</script>
+
+</body>
+  </html>
